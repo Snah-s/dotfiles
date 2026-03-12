@@ -1,0 +1,22 @@
+[submodule ".config/zsh/plugins/oh-my-zsh"]
+	path = .config/zsh/plugins/ohmyzsh
+	url = https://github.com/ohmyzsh/ohmyzsh.git
+
+[submodule ".config/zsh/themes/powerlevel10k"]
+	path = .config/zsh/themes/powerlevel10k
+	url = https://github.com/romkatv/powerlevel10k.git
+
+[submodule ".config/zsh/plugins/zsh-syntax-highlighting"]
+	path = .config/zsh/plugins/zsh-syntax-highlighting
+	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
+
+[submodule ".config/zsh/plugins/zsh-completions"]
+	path = .config/zsh/plugins/zsh-completions
+	url = https://github.com/zsh-users/zsh-completions.git
+
+[submodule ".config/zsh/plugins/zsh-autopair"]
+	path = .config/zsh/plugins/zsh-autopair
+	url = https://github.com/hlissner/zsh-autopair.git
+[submodule ".config/zsh/plugins/ohmyzsh"]
+	path = .config/zsh/plugins/ohmyzsh
+	url = https://github.com/ohmyzsh/ohmyzsh.git
