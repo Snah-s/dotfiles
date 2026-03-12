@@ -1,0 +1,12 @@
+hidetopbar@mathieu.bidon.ca
+gnome-compact-top-bar@metehan-arslan.github.io
+monitor@astraext.github.io
+extension-list@tu.berry
+Battery-Health-Charging@maniacx.github.com
+blur-my-shell@aunetx
+batterytime@typeof.pw
+copyous@boerdereinar.dev
+appindicatorsupport@rgcjonas.gmail.com
+drive-menu@gnome-shell-extensions.gcampax.github.com
+native-window-placement@gnome-shell-extensions.gcampax.github.com
+user-theme@gnome-shell-extensions.gcampax.github.com

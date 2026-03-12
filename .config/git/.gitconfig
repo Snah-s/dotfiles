@@ -1,0 +1,12 @@
+[user]
+	name = Snah-s
+[init]
+	defaultBranch = main
+[color]
+	ui = auto
+[pull]
+	rebase = false
+[credential]
+	helper = store
+[url "git@github.com:"]
+	insteadOf = https://github.com/
