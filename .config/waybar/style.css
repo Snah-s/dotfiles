@@ -1,0 +1,112 @@
+@import "colors/one-dark.css";
+
+* {
+  all: unset;
+  font-family: "Adwaita Sans", "JetBrainsMono Nerd Font Propo", "sans-serif", bold;
+}
+
+window#waybar{
+  background-color: black;
+}
+
+tooltip {
+  background: @bg0;
+  border: 1px solid @bg3;
+  border-radius: 6px;
+}
+
+tooltip label {
+  color: @fg;
+  padding: 6px;
+}
+
+#workspaces {
+  min-width: 100px;
+  font-size: 0.4rem;
+  padding: 2px 4px;
+  margin: 11px 0;
+  border-radius: 99px;
+}
+
+#workspaces button {
+  background-color: grey;
+  color: transparent;
+  padding: 0px 5px;
+  border-radius: 99px;
+  margin:0 2px;
+  min-width: 1px;
+}
+
+#workspaces button.active {
+  background-color: white;
+  min-width: 1.4rem;
+  transition: none;
+}
+
+#workspaces button.urgent {
+  background-color: white;
+  min-width: 1.4rem;
+  transition: none;
+
+}
+
+#battery,
+#network,
+#clock,
+#custom-updates,
+#temperature,
+#memory,
+#custom-notification {
+  background-color: transparent;
+  padding: 0 7.5px 0 7.5px;
+  margin: 0 0 0 6px;
+  border-radius: 45px;
+  /*border: 1px solid @bg1;*/
+}
+
+#clock {
+  color: @fg
+}
+
+#custom-updates {
+  color: @fg;
+}
+
+#temperature{
+  color : @fg;
+}
+
+#custom-notification {
+  color: @fg;
+  margin: 0 12px 0 12px;
+}
+
+#network {
+  color: @fg;
+}
+
+#battery {
+  color: @fg;
+}
+
+#memory{
+  color : @fg;
+}
+
+#cpu{
+  color: @fg;
+}
+
+
+#battery:hover,
+#cpu:hover,
+#network:hover,
+#clock:hover,
+#custom-updates:hover,
+#temperature:hover,
+#memory:hover,
+#custom-notification:hover {
+  background-color: @bg0;
+  border-radius: 12px;
+  transition: all 0.25s ease-in-out;
+}
