@@ -4,9 +4,12 @@ return {
     priority = 1000,
     config = function()
       require("vscode").setup({
-        transparent = false,
+        style = "dark", -- base Dark Modern
+        transparent = true,
         italic_comments = true,
+        disable_nvimtree_bg = true,
       })
+
       vim.cmd.colorscheme("vscode")
     end,
   },
