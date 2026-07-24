@@ -81,5 +81,5 @@ hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("swayosd-client --brightness -5
 -- Clipboard History
 hl.bind(
 	mainMod .. "+ SHIFT" .. "+ V",
-	hl.dsp.exec_cmd("cliphist list | rofi -dmenu -display-columns 2 | cliphist decode | wl-copy")
+	hl.dsp.exec_cmd("~/.config/rofi/launchers/clipboard/launcher.sh")
 )
