@@ -15,7 +15,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("swaync & swayosd-server")
 	hl.exec_cmd("waybar")
 	hl.exec_cmd("hypridle")
-	hl.exec_cmd("wl-paste --type text --watch cliphist store") --- Stores only text data
-	hl.exec_cmd("wl-paste --type image --watch cliphist store") --- Stores only image data
+	hl.exec_cmd("wl-paste --type text --watch ~/.config/rofi/launchers/clipboard/store-thumb.sh") --- Stores text + renders its thumbnail
+	hl.exec_cmd("wl-paste --type image --watch ~/.config/rofi/launchers/clipboard/store-thumb.sh") --- Stores image + renders its thumbnail
 	hl.exec_cmd("wl-clip-persist --clipboard regular") --- Persist data through system restart
 end)
