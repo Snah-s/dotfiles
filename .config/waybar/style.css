@@ -2,7 +2,7 @@
 
 * {
   all: unset;
-  font-family: "Adwaita Sans", "JetBrainsMono Nerd Font Propo", "sans-serif", bold;
+  font-family: "Adwaita Sans", "JetBrainsMono Nerd Font Propo", sans-serif;
 }
 
 window#waybar{
@@ -51,6 +51,7 @@ tooltip label {
 }
 
 #battery,
+#cpu,
 #network,
 #clock,
 #custom-updates,
@@ -83,6 +84,7 @@ tooltip label {
 
 #network {
   color: @fg;
+  font-size: 1.2rem; /* los iconos nf-md son mas chicos que el nf-fa anterior */
 }
 
 #battery {

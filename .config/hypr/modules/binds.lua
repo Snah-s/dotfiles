@@ -4,7 +4,7 @@
 
 local terminal = "kitty"
 local fileManager = "nautilus"
-local menu = "~/.config/rofi/launchers/type-6/launcher.sh || pkill rofi"
+local menu = "~/.config/rofi/launchers/type-1/launcher.sh || pkill rofi"
 
 ---------------------
 ---- KEYBINDINGS ----
@@ -20,9 +20,11 @@ local closeWindowBind = hl.bind(mainMod .. " + Q", hl.dsp.window.close())
 hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("wlogout"))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
+hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen())
 hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu))
-hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
-hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit")) -- dwindle only
+-- Solo dwindle/master, no hacen nada con layout = "scrolling"
+-- hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
+-- hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))
 hl.bind(mainMod .. " + H", hl.dsp.exec_cmd("pgrep -x waybar > /dev/null && pkill -x waybar || waybar")) -- hide and show waybar (kill the process)
 
 -- Move focus with mainMod + arrow keys
@@ -79,7 +81,4 @@ hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("swayosd-client --brightness +5")
 hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("swayosd-client --brightness -5"), { locked = true, repeating = true })
 
 -- Clipboard History
-hl.bind(
-	mainMod .. "+ SHIFT" .. "+ V",
-	hl.dsp.exec_cmd("~/.config/rofi/launchers/clipboard/launcher.sh")
-)
+hl.bind(mainMod .. "+ SHIFT" .. "+ V", hl.dsp.exec_cmd("~/.config/rofi/launchers/clipboard/launcher.sh"))

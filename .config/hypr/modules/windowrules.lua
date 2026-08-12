@@ -75,6 +75,14 @@ hl.window_rule({
 })
 
 hl.window_rule({
+	name = "wifi-tui",
+	match = { class = "^(wifi-tui)$" },
+	float = true,
+	center = true,
+	size = { 800, 540 },
+})
+
+hl.window_rule({
 	name = "picture-in-picture-float",
 	match = { class = "^(firefox)$", title = "^(Picture-in-Picture)$" },
 	float = true,

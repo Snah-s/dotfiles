@@ -27,11 +27,11 @@ hl.config({
 		rounding_power = 2,
 
 		-- Change transparency of focused and unfocused windows
-		active_opacity = 1.95,
+		active_opacity = 1,
 		inactive_opacity = 1.0,
 
 		shadow = {
-			enabled = true,
+			enabled = false,
 			range = 4,
 			render_power = 3,
 			color = 0xee1a1a1a,
