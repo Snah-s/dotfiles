@@ -31,8 +31,6 @@
                     },
         "actions":  {
                     "on-click-right": "mode",
-                    "on-scroll-up": "tz_up",
-                    "on-scroll-down": "tz_down",
                     "on-scroll-up": "shift_up",
                     "on-scroll-down": "shift_down"
                     }
@@ -65,15 +63,22 @@
   },
   "network": {
     "interface": "wlan0",
+    "interval": 5,
     "format": "{ifname}",
-    "format-wifi": "",
-    "format-ethernet": "{ipaddr}/{cidr} 󰊗",
-    "format-disconnected": "", //An empty format will hide the module.
+    "format-wifi": "{icon}",
+    // 0-20 20-40 40-60 60-80 80-100
+    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+    "format-ethernet": "󰈁",
+    "format-linked": "󰤫",
+    "format-disconnected": "󰤮",
+    "format-disabled": "󰤮",
     "tooltip-format": "{ifname} via {gwaddr} 󰊗",
     "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
     "tooltip-format-ethernet": "{ifname} ",
     "tooltip-format-disconnected": "Disconnected",
     "max-length": 50,
+    "on-click": "~/.config/rofi/scripts/wifi.sh",
+    "on-click-right": "kitty --class=wifi-tui nmtui",
   },
   "battery": {
     "bat": "BAT1",
@@ -115,7 +120,7 @@
     "exec": "waybar-module-pacman-updates --interval-seconds 5 --network-interval-seconds 300",
   },
   "temperature": {
-    "hwmon-path": "/sys/class/hwmon/hwmon1/temp1_input",
+    "thermal-zone": 0, // acpitz; hwmonN se renumera entre boots
     "critical-threshold": 80,
     "format": "{temperatureC}°C ",
     "format-critical": "{temperatureC}°C ",
