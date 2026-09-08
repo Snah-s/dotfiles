@@ -1,0 +1,133 @@
+/**
+ * Historial del portapapeles — grid de miniaturas.
+ * Basado en launchers/type-6/style-9.rasi.
+ *
+ * Colores: importa la MISMA paleta que ~/.config/rofi/config.rasi, para que el
+ * clipboard, el panel de ajustes, wifi.sh y battery.sh se vean igual. Cambiar
+ * de paleta = cambiar el @import en los dos ficheros.
+ *
+ * Lo que NO se hereda de config.rasi es la geometría: esto es un grid
+ * horizontal de imágenes (4 columnas, iconos de 180px, sin texto), no una
+ * lista. Por eso sigue pasándose con -theme desde launcher.sh.
+ **/
+
+configuration {
+	show-icons:                  true;
+}
+
+/*****----- Paleta compartida -----*****/
+@import                          "~/.config/rofi/colors/onedark.rasi"
+
+* {
+    font:                        "JetBrains Mono Nerd Font Propo 10";
+}
+
+/*****----- Main Window -----*****/
+window {
+    transparency:                "real";
+    location:                    center;
+    anchor:                      center;
+    fullscreen:                  false;
+    width:                       820px;
+    x-offset:                    0px;
+    y-offset:                    0px;
+
+    enabled:                     true;
+    border-radius:               15px;
+    cursor:                      "default";
+    background-color:            @background;
+}
+
+/*****----- Main Box -----*****/
+mainbox {
+    enabled:                     true;
+    spacing:                     10px;
+    padding:                     14px;
+    background-color:            transparent;
+    orientation:                 vertical;
+    children:                    [ "inputbar", "listview" ];
+}
+
+/*****----- Inputbar -----*****/
+inputbar {
+    enabled:                     true;
+    width:                       220px;
+    margin:                      0px 286px;
+    spacing:                     6px;
+    padding:                     6px 10px;
+    border-radius:               8px;
+    background-color:            @background-alt;
+    text-color:                  @foreground;
+    children:                    [ "textbox-prompt-colon", "entry" ];
+}
+textbox-prompt-colon {
+    enabled:                     true;
+    expand:                      false;
+    str:                         "";
+    font:                        "JetBrains Mono Nerd Font Propo 8";
+    background-color:            inherit;
+    text-color:                  inherit;
+}
+entry {
+    enabled:                     true;
+    font:                        "JetBrains Mono Nerd Font Propo 8";
+    background-color:            inherit;
+    text-color:                  inherit;
+    cursor:                      text;
+    placeholder:                 "Clipboard";
+    placeholder-color:           inherit;
+}
+
+/*****----- Listview -----*****/
+listview {
+    enabled:                     true;
+    columns:                     4;
+    lines:                       1;
+    cycle:                       false;
+    dynamic:                     true;
+    scrollbar:                   false;
+    layout:                      vertical;
+    flow:                        horizontal;
+    reverse:                     false;
+    fixed-height:                true;
+    fixed-columns:               true;
+
+    spacing:                     8px;
+    background-color:            transparent;
+    text-color:                  @foreground;
+    cursor:                      "default";
+}
+
+/*****----- Elements -----*****/
+element {
+    enabled:                     true;
+    orientation:                 vertical;
+    padding:                     4px;
+    border-radius:               10px;
+    cursor:                      pointer;
+}
+
+/* Hay que declarar el fondo de CADA estado. Con `alternate.normal` sin poner,
+   rofi lo sacaba de su tema interno y las celdas pares del grid salían de otro
+   color. Mismo fallo que había en config.rasi. */
+element normal.normal    { background-color: @background-alt; text-color: @foreground; }
+element alternate.normal { background-color: @background-alt; text-color: @foreground; }
+element normal.urgent    { background-color: @background-alt; text-color: @urgent;     }
+element alternate.urgent { background-color: @background-alt; text-color: @urgent;     }
+element normal.active    { background-color: @background-alt; text-color: @active;     }
+element alternate.active { background-color: @background-alt; text-color: @active;     }
+
+element selected.normal  { background-color: @selected; text-color: @background; }
+element selected.urgent  { background-color: @urgent;   text-color: @background; }
+element selected.active  { background-color: @active;   text-color: @background; }
+
+element-icon {
+    background-color:            transparent;
+    text-color:                  inherit;
+    border-radius:               8px;
+    size:                        180px;
+    cursor:                      inherit;
+}
+element-text {
+    enabled:                     false;
+}

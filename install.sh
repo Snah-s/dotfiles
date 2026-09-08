@@ -30,9 +30,9 @@ git -C "$REPO" submodule update --init --recursive
 
 # --- 5. deploy configs (repo -> ~), the reverse of sync.sh -----------------
 for d in hypr kitty nvim waybar swaync rofi zsh; do
-  rsync -a "$REPO/.config/$d/" "$CFG/$d/"
+  rsync -a "$REPO/config/$d/" "$CFG/$d/"
 done
 cp "$REPO/.zshenv" "$HOME/.zshenv"
-cp "$REPO/.config/git/.gitconfig" "$HOME/.gitconfig"
+cp "$REPO/config/git/.gitconfig" "$HOME/.gitconfig"
 
 echo "Done. Log out/in (or start Hyprland) to pick everything up."

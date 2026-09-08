@@ -9,12 +9,12 @@ RS="rsync -a --delete --exclude .git/ --exclude .vscode/"
 
 # Whole dirs mirrored verbatim
 for d in hypr kitty nvim waybar swaync rofi; do
-  $RS "$SRC/$d/" "$REPO/.config/$d/"
+  $RS "$SRC/$d/" "$REPO/config/$d/"
 done
 
 # zsh: only rc files (plugins/themes are submodules, history is gitignored)
 if [ "${1:-}" != "-n" ]; then
-  for f in .zshrc .zshenv .p10k.zsh; do cp "$SRC/zsh/$f" "$REPO/.config/zsh/$f"; done
+  for f in .zshrc .zshenv .p10k.zsh; do cp "$SRC/zsh/$f" "$REPO/config/zsh/$f"; done
 fi
 
 echo "Synced. Review with: git -C '$REPO' status"
