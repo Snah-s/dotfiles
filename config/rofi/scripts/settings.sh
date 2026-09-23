@@ -408,22 +408,27 @@ menu_wallpaper() {
 		return 0
 	}
 
+	# Loops so you can try several wallpapers in a row; rofi exits non-zero on
+	# Esc, which is what breaks out and drops back to Settings.
 	local idx
-	idx=$(
-		for f in "${files[@]}"; do
-			printf '%s\0icon\x1fthumbnail://%s\n' "$(basename "${f%.*}")" "$f"
-		done | rofi -dmenu -i -p "Wallpaper" -show-icons -format i \
-			-theme-str 'element-icon { size: 96px; } listview { lines: 5; }'
-	) || return 0
-	[[ $idx =~ ^[0-9]+$ ]] && awww img "${files[idx]}"
+	while :; do
+		idx=$(
+			for f in "${files[@]}"; do
+				printf '%s\0icon\x1fthumbnail://%s\n' "$(basename "${f%.*}")" "$f"
+			done | rofi -dmenu -i -p "Wallpaper" -show-icons -format i \
+				-theme-str 'element-icon { size: 96px; } listview { lines: 5; }'
+		) || return 0
+		[[ $idx =~ ^[0-9]+$ ]] && awww img "${files[idx]}"
+	done
 }
 
 # ─── Shortcuts and help ───────────────────────────────────────────────────
 
-pager() { kitty -e "$@" >/dev/null 2>&1 & disown; }
+# Spawning a terminal always closes the menu. The `exit` is what does it: menu_help
+# has no `while`, but menu_main does, so returning normally reopened Settings right
+# on top of the terminal. help-tui is the app-id windowrules.lua floats and centers.
+pager() { foot --class=help-tui "$@" >/dev/null 2>&1 & disown; exit 0; }
 
-# Opens and exits: leaving the menu on top of the pager makes no sense, so this
-# submenu has no `while`.
 menu_help() {
 	local sel
 	sel=$(menu "Shortcuts and help" "󰌌  Hyprland\n󰈙  Nvim\n󰆍  Terminal\n󱆃  Bash") || return 0
@@ -442,12 +447,13 @@ menu_help() {
 menu_main() {
 	local sel
 	while :; do
-		sel=$(menu "Settings" "󰁹  Battery\n󰍹  Display\n󰋩  Wallpaper\n󰖩  Wi-Fi\n󰧑  Shortcuts and help") || return 0
+		sel=$(menu "Settings" "󰁹  Battery\n󰍹  Display\n󰋩  Wallpaper\n󰖩  Wi-Fi\n󰂯  Bluetooth\n󰧑  Shortcuts and help") || return 0
 		case "$(label "$sel")" in
 		"Battery") menu_battery ;;
 		"Display") menu_display ;;
 		"Wallpaper") menu_wallpaper ;;
 		"Wi-Fi") "$ROFI_DIR/scripts/wifi.sh" ;;
+		"Bluetooth") "$ROFI_DIR/scripts/bluetooth.sh" ;;
 		"Shortcuts and help") menu_help ;;
 		*) return 0 ;;
 		esac

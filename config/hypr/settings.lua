@@ -1,6 +1,6 @@
--- Estado del panel de ajustes (~/.config/rofi/scripts/settings.sh).
--- Lo escribe el menú y lo aplica modules/settings.lua vía dofile().
--- Editable a mano; el menú lo respeta.
+-- Settings panel state (~/.config/rofi/scripts/settings.sh).
+-- Written by the menu, applied by modules/settings.lua via dofile().
+-- Editable by hand; the menu respects it.
 
 return {
 	-- "scrolling" | "dwindle" | "master"
@@ -9,6 +9,6 @@ return {
 	-- "extend" | "mirror" | "internal" | "external"
 	monitor = "extend",
 
-	-- excepciones por workspace; el resto hereda `layout`
+	-- per-workspace exceptions; the rest inherit `layout`
 	ws = {},
 }

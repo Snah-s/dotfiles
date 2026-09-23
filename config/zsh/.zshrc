@@ -8,6 +8,7 @@ export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
+export PATH="$HOME/.local/opt/Antigravity-x64:$PATH"
 
 # --------------------------------------------------
 # Powerlevel10k instant prompt
@@ -112,3 +113,15 @@ alias ls='eza --icons --group-directories-first'
 alias ll='eza -lh --icons'
 alias la='eza -lah --icons'
 alias lt='eza --tree --level=2 --icons'
+
+# bun completions
+[ -s "/home/snah/.bun/_bun" ] && source "/home/snah/.bun/_bun"
+
+# cursor shape permanent
+autoload -Uz add-zsh-hook
+
+restore_cursor() {
+  printf '\e[5 q'
+}
+
+add-zsh-hook precmd restore_cursor

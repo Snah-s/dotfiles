@@ -83,6 +83,22 @@ hl.window_rule({
 })
 
 hl.window_rule({
+	name = "updates-tui",
+	match = { class = "^(updates-tui)$" },
+	float = true,
+	center = true,
+	size = { 900, 600 },
+})
+
+hl.window_rule({
+	name = "help-tui",
+	match = { class = "^(help-tui)$" },
+	float = true,
+	center = true,
+	size = { 1000, 640 },
+})
+
+hl.window_rule({
 	name = "picture-in-picture-float",
 	match = { class = "^(firefox)$", title = "^(Picture-in-Picture)$" },
 	float = true,

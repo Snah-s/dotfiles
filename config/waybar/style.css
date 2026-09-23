@@ -51,9 +51,12 @@ tooltip label {
 }
 
 #battery,
+#bluetooth,
 #cpu,
 #network,
+#pulseaudio,
 #clock,
+#tray,
 #custom-updates,
 #temperature,
 #memory,
@@ -71,6 +74,7 @@ tooltip label {
 
 #custom-updates {
   color: @fg;
+  margin-right: 1px;
 }
 
 #temperature{
@@ -82,14 +86,31 @@ tooltip label {
   margin: 0 12px 0 12px;
 }
 
+#pulseaudio {
+  color: @fg;
+}
+
 #network {
   color: @fg;
   font-size: 1.2rem; /* los iconos nf-md son mas chicos que el nf-fa anterior */
 }
 
+#bluetooth {
+  color: @fg;
+}
+
+/* solo aparece encendido o conectado: los estados off/disabled/no-controller
+   tienen format vacio y waybar oculta el modulo entero */
+#bluetooth.connected { color: @blue; }
+
 #battery {
   color: @fg;
 }
+
+#battery.charging { color: @green; }
+/* warning/critical van ultimos: misma especificidad que .charging, el nivel gana */
+#battery.warning  { color: @yellow; }
+#battery.critical { color: @red; }
 
 #memory{
   color : @fg;
@@ -101,8 +122,10 @@ tooltip label {
 
 
 #battery:hover,
+#bluetooth:hover,
 #cpu:hover,
 #network:hover,
+#pulseaudio:hover,
 #clock:hover,
 #custom-updates:hover,
 #temperature:hover,

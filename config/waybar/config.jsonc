@@ -1,13 +1,13 @@
 {
   "modules-left": ["hyprland/workspaces"],
-  "modules-center": ["clock","tray"],
+  "modules-center": ["bluetooth","custom/updates","clock","tray"],
   "modules-right": [
     "cpu",
     "memory",
     "temperature",
+    "pulseaudio",
     "network",
     "battery",
-    "custom/updates",
     "custom/notification",
   ],
 
@@ -36,29 +36,15 @@
                     }
     },
 
-//  "clock": {
-//    "interval": 1,
-//    "format": "{:%H:%M:%S}",
-//    "max-length": 25,
-//  },
   "hyprland/workspaces": {
-    "format": "{icon}",
-    "on-click": "active",
-    "format-icons": {
-      "1": "",
-      "2": "",
-      "3": "",
-      "4": "",
-      "5": "",
-    },
-    "sort-by-number": true,
-  }, 
+    "sort-by": "number",
+  },
   "tray": {
     "icon-size": 21,
     "spacing": 10,
     "icons": {
       "blueman": "bluetooth",
-      "TelegramDesktop": "$HOME/.local/share/icons/hicolor/16x16/apps/telegram.png",
+      "TelegramDesktop": "org.telegram.desktop",
     },
   },
   "network": {
@@ -78,11 +64,15 @@
     "tooltip-format-disconnected": "Disconnected",
     "max-length": 50,
     "on-click": "~/.config/rofi/scripts/wifi.sh",
-    "on-click-right": "kitty --class=wifi-tui nmtui",
+    "on-click-right": "foot --class=wifi-tui nmtui",
   },
   "battery": {
     "bat": "BAT1",
     "interval": 30,
+    "states": {
+      "warning": 25,
+      "critical": 10,
+    },
     "format": "{capacity}% {icon}",
     "format-icons": {
       "default": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
@@ -110,14 +100,18 @@
     "escape": true,
   },
   "custom/updates": {
-    "format": "{text}",
-    "return-type": "json",
+    // O el glifo, o la cifra: nunca los dos. En 0 el binario manda text vacio
+    // (--no-zero-output) y queda el arch; con updates el icono es "" y queda el numero.
+    // El 130% sube el glifo a ~15px.
+    "format": "{icon}{text}",
     "format-icons": {
+      "updated": "<span size='130%'>󰣇</span>",
       "has-updates": "",
-      "updated": "",
     },
+    "return-type": "json",
     "exec-if": "which waybar-module-pacman-updates",
-    "exec": "waybar-module-pacman-updates --interval-seconds 5 --network-interval-seconds 300",
+    "exec": "waybar-module-pacman-updates --no-zero-output --interval-seconds 60 --network-interval-seconds 1800",
+    "on-click": "foot --class=updates-tui ~/.config/waybar/scripts/updates.sh",
   },
   "temperature": {
     "thermal-zone": 0, // acpitz; hwmonN se renumera entre boots
@@ -135,6 +129,37 @@
     "interval": 10,
     "format": "{usage}% ",
     "max-length": 10,
-    "tooltip": true,
+  },
+  "bluetooth": {
+    // Sin format-off/on caia al `format` por defecto, que es {status}: la barra
+    // mostraba el texto literal "off". Vacio = waybar oculta el modulo.
+    "format-disabled": "",
+    "format-no-controller": "",
+    "format-off": "",
+    "format-on": "",
+    "on-click": "~/.config/rofi/scripts/bluetooth.sh",
+    "format-connected": " {device_alias}",
+    "format-connected-battery": " {device_alias} {device_battery_percentage}%",
+    "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
+    "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+    "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
+  },
+  "pulseaudio": {
+	  "format": "{icon}",
+	  "format-bluetooth": "{icon}",
+	  "format-muted": "",
+	  "format-icons": {
+		  "headphone": "",
+		  "hands-free": "󰂑",
+		  "headset": "󰂑",
+		  "phone": "",
+		  "phone-muted": "",
+		  "portable": "",
+		  "car": "",
+		  "default": ["", ""]
+	  },
+	  "scroll-step": 1,
+	  "on-click": "pavucontrol"
   }
 }

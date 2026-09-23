@@ -5,6 +5,7 @@
 # (overridable via env so the redirect branch can be tested without a real portal)
 CHECK_URI="${CHECK_URI:-http://ping.archlinux.org/nm-check.txt}"
 PORTAL_ITEM="󰖟  Log in to the network"
+RESCAN_ITEM="󰑐  Rescan"
 
 # A captive portal intercepts the HTTP and redirects to its login, so we follow
 # the redirect to get the real URL instead of guessing the gateway IP.
@@ -64,6 +65,8 @@ menu=$(echo "$networks" | awk -F: '{
     printf "%s%s (%s%%)\n", icon, $2, $4
 }')
 
+menu="$RESCAN_ITEM"$'\n'"$menu"
+
 # if the current network requires a web login, offer it at the very top
 case "$(nmcli networking connectivity)" in
 portal | limited) menu="$PORTAL_ITEM"$'\n'"$menu" ;;
@@ -74,6 +77,14 @@ selection=$(echo "$menu" | rofi -dmenu -p "WiFi")
 if [ "$selection" = "$PORTAL_ITEM" ]; then
   open_portal
   exit
+fi
+
+# blocking scan and start over: re-exec reuses the whole listing path instead of
+# duplicating it. NM refuses a rescan right after the previous one, which is
+# harmless here — the async rescan of the last open already refreshed the cache.
+if [ "$selection" = "$RESCAN_ITEM" ]; then
+  nmcli dev wifi rescan >/dev/null 2>&1
+  exec "$0"
 fi
 
 ssid=$(echo "$selection" | sed 's/^[󰖩󰖪] //; s/ ([0-9]*%)$//')
