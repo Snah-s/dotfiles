@@ -9,4 +9,4 @@ require("modules.input")
 require("modules.permissions")
 require("modules.binds")
 require("modules.windowrules")
-require("modules.settings") -- el último: sobreescribe monitors y layout
+require("modules.settings") -- this module modifies the monitors and layout

@@ -1,0 +1,12 @@
+/*
+ * Paleta tomada de ~/.config/rofi/colors/onedark.rasi, el tema activo de rofi
+ * (lo importan config.rasi y todos los launchers type-*).
+ * Si cambias el tema de rofi, actualiza estos seis valores.
+ */
+
+@define-color background     #1E2127;
+@define-color background-alt #282B31;
+@define-color foreground     #FFFFFF;
+@define-color selected       #61AFEF;
+@define-color active         #98C379;
+@define-color urgent         #E06C75;

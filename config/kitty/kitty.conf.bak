@@ -23,8 +23,7 @@ map alt+9 goto_tab 9
 
 cursor_shape beam
 
-window_padding_width 0 5 5 5
-placement_strategy top-left
+window_padding_width 5
 
 macos_titlebar_color background
 
