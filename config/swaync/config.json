@@ -43,7 +43,7 @@
     "mpris": {
       "image-size": 96,
       "image-radius": 12,
-      "show-album-art": "always",
+      "show-album-art": "when-available",
       "autohide": true
     },
     "volume": {
