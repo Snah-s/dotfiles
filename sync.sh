@@ -16,5 +16,3 @@ done
 if [ "${1:-}" != "-n" ]; then
   for f in .zshrc .zshenv .p10k.zsh; do cp "$SRC/zsh/$f" "$REPO/config/zsh/$f"; done
 fi
-
-echo "Synced. Review with: git -C '$REPO' status"
