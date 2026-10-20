@@ -99,6 +99,14 @@ hl.window_rule({
 })
 
 hl.window_rule({
+  name = "float-terminal",
+  match = { class = "^float-terminal$" },
+  float = true,
+  center = true,
+  size = {800, 600},
+})
+
+hl.window_rule({
 	name = "picture-in-picture-float",
 	match = { class = "^(firefox)$", title = "^(Picture-in-Picture)$" },
 	float = true,
@@ -118,4 +126,12 @@ hl.window_rule({
 	},
 	float = true,
 	center = true,
+})
+
+hl.window_rule({
+  name = "ZapFast",
+  match = { class = "zapfast"},
+  float = true,
+  center = true,
+  size = "800 600"
 })

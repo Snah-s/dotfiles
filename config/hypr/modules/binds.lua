@@ -2,7 +2,7 @@
 ---- MY PROGRAMS ----
 ---------------------
 
-local terminal = "foot tmux"
+local terminal = "foot"
 local fileManager = "nautilus"
 local menu = "~/.config/rofi/launchers/type-1/launcher.sh || pkill rofi"
 local settings = "~/.config/rofi/scripts/settings.sh"
@@ -19,7 +19,8 @@ local uwsmApp = "uwsm-app -- "
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
-hl.bind(mainMod .. " + return", hl.dsp.exec_cmd(uwsmApp .. terminal))
+hl.bind(mainMod .. " + return", hl.dsp.exec_cmd(uwsmApp .. terminal .. " tmux"))
+hl.bind(mainMod .. " + SHIFT + return", hl.dsp.exec_cmd(uwsmApp .. terminal .. " --app-id=float-terminal"))
 local closeWindowBind = hl.bind(mainMod .. " + Q", hl.dsp.window.close())
 -- closeWindowBind:set_enabled(false)
 hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("wlogout"))
@@ -97,7 +98,3 @@ hl.bind(mainMod .. "+ SHIFT" .. "+ V", hl.dsp.exec_cmd("~/.config/rofi/launchers
 
 -- Settings menu
 hl.bind("XF86Tools", hl.dsp.exec_cmd(settings))
-
--- Testing binds
-hl.bind(mainMod .. "+ O", hl.dsp.exec_cmd("foot btop"))
-
