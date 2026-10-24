@@ -114,6 +114,17 @@ alias ll='eza -lh --icons'
 alias la='eza -lah --icons'
 alias lt='eza --tree --level=2 --icons'
 
+# Pulls every plugin/theme clone; only Oh My Zsh would update on its own.
+# --ff-only: never merges over a clone you edited by hand.
+zsh-update() {
+  local d
+  for d in "$ZDOTDIR"/plugins/*/ "$ZDOTDIR"/themes/*/; do
+    print -P "%B${d:h:t}/${d:t}%b"
+    git -C "$d" pull --ff-only
+  done
+  print "Open a new shell to load the updates."
+}
+
 # bun completions
 [ -s "/home/snah/.bun/_bun" ] && source "/home/snah/.bun/_bun"
 

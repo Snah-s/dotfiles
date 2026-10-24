@@ -22,24 +22,40 @@ portal_url() {
 
 open_portal() { xdg-open "$(portal_url)" >/dev/null 2>&1 & }
 
-# Sort by signal (numeric: with a bare -k4 "9" ends up above "100"), drop hidden
+# Records are IN-USE:SIGNAL:SECURITY:SSID from `nmcli -t -e no`. The SSID goes
+# last and is everything after the 3rd colon: a name can contain ":" itself
+# ("Casa:5G"), and -e no keeps it raw instead of escaping it as "\:".
+SSID_AWK='{ ssid = $0; sub(/^([^:]*:){3}/, "", ssid) }'
+
+# Sort by signal (numeric: with a bare -k2 "9" ends up above "100"), drop hidden
 # networks and keep a single record per SSID. Without the dedup the same network
-# shows up twice when there are several APs or two bands.
-filter_networks() { sort -t: -k4,4nr | awk -F: '$2 != "" && !seen[$2]++'; }
+# shows up twice when there are several APs or two bands. The row shown is the
+# AP you are connected to, if any (so the connected icon is not lost when another
+# AP of the same network is stronger); its place in the list is the strongest one's.
+filter_networks() {
+  sort -t: -k2,2nr | awk -F: "$SSID_AWK"' ssid != "" {
+    if (!(ssid in rec)) { order[++n] = ssid; rec[ssid] = $0 }
+    if ($1 == "*") rec[ssid] = $0
+  } END { for (i = 1; i <= n; i++) print rec[order[i]] }'
+}
 
 # Exact match by field. With grep the SSID went in as a regex, so a name with
-# . + [ matched another network or none at all.
-security_of() { awk -F: -v s="$1" '$2 == s { print $3; exit }'; }
+# . + [ matched another network or none at all. ENVIRON, not -v: -v would eat
+# backslashes in the name.
+security_of() { S="$1" awk -F: "$SSID_AWK"' ssid == ENVIRON["S"] { print $3; exit }'; }
 
 case "$1" in
 portal-url) portal_url; exit ;;
 selftest)
-  fix=$' :TEKI:WPA2:9\n*:TEKI:WPA2:77\n :Casa+X:WPA2:100\n :Hidden::50\n :DAVID:WPA2:34\n :::80'
-  got=$(printf '%s\n' "$fix" | filter_networks | awk -F: '{ printf "%s/%s ", $2, $4 }')
-  [ "$got" = "Casa+X/100 TEKI/77 Hidden/50 DAVID/34 " ] ||
-    { echo "FAIL order/dedup/hidden: $got"; exit 1; }
+  # TEKI: connected to the weaker AP (77) while a stronger one (90) is visible
+  fix=$' :90:WPA2:TEKI\n*:77:WPA2:TEKI\n :100:WPA2:Casa+X\n :50::Hidden\n :34:WPA2:DAVID\n :80::\n :60:WPA3:Casa:5G'
+  got=$(printf '%s\n' "$fix" | filter_networks | awk -F: "$SSID_AWK"' { printf "%s%s/%s ", ($1 == "*" ? "*" : ""), ssid, $2 }')
+  [ "$got" = "Casa+X/100 *TEKI/77 Casa:5G/60 Hidden/50 DAVID/34 " ] ||
+    { echo "FAIL order/dedup/hidden/in-use: $got"; exit 1; }
   [ "$(printf '%s\n' "$fix" | security_of 'Casa+X')" = "WPA2" ] ||
     { echo "FAIL: SSID with + does not match"; exit 1; }
+  [ "$(printf '%s\n' "$fix" | security_of 'Casa:5G')" = "WPA3" ] ||
+    { echo "FAIL: SSID with : does not match"; exit 1; }
   [ -z "$(printf '%s\n' "$fix" | security_of 'TEK')" ] ||
     { echo "FAIL: partial SSID match"; exit 1; }
   echo "selftest OK"; exit ;;
@@ -57,12 +73,12 @@ fi
 
 # --rescan no skips NM's cache (0.03s instead of 4.5s). NM scans on its own in
 # the background; the async rescan below keeps the next open fresh.
-networks=$(nmcli -t -f IN-USE,SSID,SECURITY,SIGNAL dev wifi list --rescan no | filter_networks)
+networks=$(nmcli -t -e no -f IN-USE,SIGNAL,SECURITY,SSID dev wifi list --rescan no | filter_networks)
 nmcli dev wifi rescan >/dev/null 2>&1 &
 
-menu=$(echo "$networks" | awk -F: '{
+menu=$(echo "$networks" | awk -F: "$SSID_AWK"' {
     icon = ($1=="*") ? "󰖩 " : "󰖪 "
-    printf "%s%s (%s%%)\n", icon, $2, $4
+    printf "%s%s (%s%%)\n", icon, ssid, $2
 }')
 
 menu="$RESCAN_ITEM"$'\n'"$menu"
@@ -93,7 +109,7 @@ ssid=$(echo "$selection" | sed 's/^[󰖩󰖪] //; s/ ([0-9]*%)$//')
 
 security=$(echo "$networks" | security_of "$ssid")
 
-if nmcli -g NAME connection show | grep -qxF "$ssid"; then
+if nmcli -e no -g NAME connection show | grep -qxF "$ssid"; then
   # profile already saved: NM has the key, nothing to ask
   output=$(nmcli connection up id "$ssid" 2>&1)
   ok=$?
@@ -103,7 +119,9 @@ elif [ -z "$security" ] || [ "$security" = "--" ]; then
 else
   pass=$(rofi -dmenu -password -p "Password")
   [ -z "$pass" ] && exit
-  output=$(nmcli dev wifi connect "$ssid" password "$pass" 2>&1)
+  # via stdin, not `password "$pass"`: arguments are readable by anyone in `ps`.
+  # printf is a builtin, so the key never shows up in a process list.
+  output=$(printf '%s\n' "$pass" | nmcli --ask dev wifi connect "$ssid" 2>&1)
   ok=$?
 fi
 

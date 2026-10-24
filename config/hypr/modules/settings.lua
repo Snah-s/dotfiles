@@ -57,6 +57,8 @@ end
 -- El callback recibe un HL.Workspace, que llega como *userdata*, no como table:
 -- comprobar `type(ws) == "table"` falla y acaba pasando el objeto entero como id.
 -- Indexar ws.id sí funciona.
+-- shortcut: el layout es global, así que con dos monitores el workspace visible en
+-- el otro también cambia de layout; mejorar si Hyprland respeta workspace_rule.layout.
 hl.on("workspace.active", function(ws)
 	apply_layout(ws and ws.id)
 end)
@@ -101,7 +103,17 @@ end
 apply_monitor(S.monitor or "extend")
 
 -- Al arrancar, get_monitors() puede estar todavía vacío y al enchufar una
--- pantalla nadie re-ejecuta el config: por eso este es el único callback.
+-- pantalla nadie re-ejecuta el config: por eso este callback.
 hl.on("monitor.added", function()
 	apply_monitor(S.monitor or "extend")
+end)
+
+-- En "external", desenchufar el último externo deja el interno apagado y sin
+-- pantalla. El reload re-ejecuta monitors.lua, que lo enciende, y la guarda de
+-- apply_monitor ya no lo apaga. Sin la condición habría bucle: apagar eDP-1
+-- también dispara monitor.removed.
+hl.on("monitor.removed", function()
+	if S.monitor == "external" and #externals() == 0 then
+		hl.exec_cmd("hyprctl reload")
+	end
 end)

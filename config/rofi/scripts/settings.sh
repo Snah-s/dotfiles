@@ -45,16 +45,11 @@ INTERNAL="eDP-1"
 
 # ─── Helpers ──────────────────────────────────────────────────────────────
 
-# menu <prompt> <options \n> [mesg] [preselected]
+# menu <prompt> <options \n> [mesg]
 menu() {
-	local prompt=$1 options=$2 mesg=$3 preselect=$4
+	local prompt=$1 options=$2 mesg=$3
 	local args=(-dmenu -i -p "$prompt")
 	[[ -n $mesg ]] && args+=(-mesg "$mesg")
-	if [[ -n $preselect ]]; then
-		local idx
-		idx=$(printf '%b\n' "$options" | grep -nxF "$preselect" | head -1 | cut -d: -f1)
-		[[ -n $idx ]] && args+=(-selected-row "$((idx - 1))")
-	fi
 	printf '%b\n' "$options" | rofi "${args[@]}"
 }
 
@@ -226,6 +221,8 @@ menu_layout() {
 		sel=$(menu "Global layout" "$opts" "Current: $ST_layout") || return 0
 		sel=$(label "$sel")
 		[[ -n $sel ]] || return 0
+		# rofi accepts typed text: a typo with no match would be saved as the layout
+		case $sel in scrolling | dwindle | master) ;; *) continue ;; esac
 		ST_layout=$sel
 		state_save && hypr_apply
 	done
@@ -247,7 +244,7 @@ menu_layout_ws() {
 		pick=$(menu "Workspace $ws" "󰜘  inherit\n󱒆  scrolling\n󰕰  dwindle\n󰯍  master" \
 			"Now: ${ST_ws[$ws]:-inherit ($ST_layout)}") || continue
 		pick=$(label "$pick")
-		[[ -n $pick ]] || continue
+		case $pick in inherit | scrolling | dwindle | master) ;; *) continue ;; esac
 
 		if [[ $pick == inherit ]]; then
 			unset 'ST_ws[$ws]'
@@ -270,7 +267,7 @@ menu_layout_ws() {
 IDLE_DIM='brightnessctl -s set'
 IDLE_KBD='kbd_backlight'
 IDLE_LOCK='loginctl lock-session'
-IDLE_DPMS='dpms off'
+IDLE_DPMS='dpms({action = "off"'
 IDLE_SUSPEND='systemctl suspend'
 
 idle_get() { # idle_get <on-timeout pattern>
@@ -317,6 +314,9 @@ idle_set() { # idle_set <file> <on-timeout pattern> <seconds>
 
 idle_restart() {
 	pkill -x hypridle
+	# pkill only sends SIGTERM: wait for the old one to exit (max 3s) or pgrep
+	# still sees it and the restart is skipped, leaving no lock/suspend at all.
+	for _ in {1..30}; do pgrep -x hypridle >/dev/null || break; sleep 0.1; done
 	pgrep -x hypridle >/dev/null || { hypridle >/dev/null 2>&1 & disown; }
 }
 
@@ -431,14 +431,15 @@ pager() { foot --class=help-tui "$@" >/dev/null 2>&1 & disown; exit 0; }
 
 menu_help() {
 	local sel
-	sel=$(menu "Shortcuts and help" "󰌌  Hyprland\n󰈙  Nvim\n󰆍  Terminal\n󱆃  Bash") || return 0
+	sel=$(menu "Shortcuts and help" "󰌌  Hyprland\n󰈙  Nvim\n󰆍  Terminal\n󱆃  Zsh") || return 0
 	case "$(label "$sel")" in
 	# hyprctl -j binds returns "__lua" as the dispatcher with a Lua config,
 	# so the readable source is the module itself.
 	"Hyprland") pager bat --style=plain --paging=always "$HOME/.config/hypr/modules/binds.lua" ;;
 	"Nvim") pager nvim -c 'help index' -c 'only' ;;
-	"Terminal") pager bat --style=plain --paging=always "$HOME/.config/kitty/kitty.conf" ;;
-	"Bash") pager man bash ;;
+	# the terminal is foot + tmux (binds.lua); its shortcuts live in tmux.conf
+	"Terminal") pager bat --style=plain --paging=always "$HOME/.config/tmux/tmux.conf" ;;
+	"Zsh") pager man zshall ;;
 	esac
 }
 
@@ -459,5 +460,63 @@ menu_main() {
 		esac
 	done
 }
+
+# selftest: the parsers that rewrite settings.lua and hypridle.conf, on temp copies.
+case "$1" in
+selftest)
+	tmp=$(mktemp -d) || exit 1
+	trap 'rm -rf "$tmp"' EXIT
+	fail() { echo "FAIL: $*"; exit 1; }
+
+	IDLE_CONF="$tmp/hypridle.conf"
+	cat >"$IDLE_CONF" <<-'EOF'
+		general {
+		  after_sleep_cmd = hyprctl dispatch 'hl.dsp.dpms({action = "on"})'
+		}
+		listener {
+		  timeout = 150   # 2.5min.
+		  on-timeout = brightnessctl -s set 10%
+		}
+		listener {
+		  timeout = 150
+		  on-timeout = brightnessctl -sd asus::kbd_backlight set 0
+		}
+		listener {
+		  timeout = 300   # 5min
+		  on-timeout = loginctl lock-session
+		}
+		listener {
+		  timeout = 330
+		  on-timeout = hyprctl dispatch 'hl.dsp.dpms({action = "off"})'
+		  on-resume = hyprctl dispatch 'hl.dsp.dpms({action = "on"})'
+		}
+		listener {
+		  timeout = 1800
+		  on-timeout = systemctl suspend
+		}
+	EOF
+	before=$(cat "$IDLE_CONF")
+	idle_set "$IDLE_CONF" "$IDLE_LOCK" 400
+	got="$(idle_get "$IDLE_DIM") $(idle_get "$IDLE_KBD") $(idle_get "$IDLE_LOCK") $(idle_get "$IDLE_DPMS") $(idle_get "$IDLE_SUSPEND")"
+	[[ $got == "150 150 400 330 1800" ]] || fail "idle timeouts: $got"
+	# only the lock timeout line may change
+	changed=$(diff <(echo "$before") "$IDLE_CONF" | grep -c '^>')
+	[[ $changed == 1 ]] || fail "idle_set changed $changed lines"
+	grep -qx '  timeout = 400   # 6.66667min' "$IDLE_CONF" || fail "lock line: $(grep 400 "$IDLE_CONF")"
+
+	STATE="$tmp/settings.lua"
+	ST_layout=dwindle ST_monitor=mirror ST_ws=([2]=master [10]=scrolling)
+	state_save || fail "state_save"
+	ST_ws=()
+	state_load
+	[[ "$ST_layout $ST_monitor ${ST_ws[2]} ${ST_ws[10]} ${#ST_ws[@]}" == "dwindle mirror master scrolling 2" ]] ||
+		fail "state roundtrip: $ST_layout $ST_monitor ${ST_ws[*]}"
+	echo 'return {' >"$STATE" # half-written file -> defaults, no hang
+	state_load
+	[[ "$ST_layout $ST_monitor ${#ST_ws[@]}" == "scrolling extend 0" ]] || fail "broken state: $ST_layout $ST_monitor"
+	echo "selftest OK"
+	exit
+	;;
+esac
 
 menu_main

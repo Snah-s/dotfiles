@@ -29,9 +29,11 @@ fi
 git -C "$REPO" submodule update --init --recursive
 
 # --- 5. deploy configs (repo -> ~), the reverse of sync.sh -----------------
-for d in hypr kitty nvim waybar swaync rofi zsh; do
-  rsync -a "$REPO/config/$d/" "$CFG/$d/"
+for d in hypr kitty nvim waybar swaync rofi foot tmux xsettingsd nwg-look btop zsh; do
+  rsync -au "$REPO/config/$d/" "$CFG/$d/" # -u: never clobber a newer live file
 done
+(cd "$REPO/config" && rsync -auR gtk-3.0/settings.ini gtk-4.0/settings.ini mimeapps.list code-flags.conf \
+  Code/User/settings.json Code/User/keybindings.json "$CFG/")
 cp "$REPO/.zshenv" "$HOME/.zshenv"
 cp "$REPO/config/git/.gitconfig" "$HOME/.gitconfig"
 
