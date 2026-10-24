@@ -1,0 +1,165 @@
+{
+  "epitech-c-cpp-headers.username": "EPITECH",
+  "epitech-c-cpp-headers.login": "EPITECH",
+  "epitech-c-cpp-headers.headerType": "post2017",
+  "epitech-c-cpp-headers.usePragmaOnce": false,
+  "epitech-c-cpp-headers.autoGenerateClasses": true,
+  "epitech-c-cpp-headers.indentAccessSpecifiers": true,
+  "workbench.iconTheme": "vscode-icons",
+  "code-runner.runInTerminal": true,
+  "editor.wordWrap": "on",
+  "[python]": {
+    "editor.formatOnType": true
+  },
+  "cmake.configureOnOpen": true,
+  "cSpell.language": "en,es-ES,en-GB",
+  "terminal.integrated.cursorStyle": "line",
+  "terminal.integrated.cursorBlinking": true,
+  "cSpell.userWords": ["cout", "gradescope", "muestral", "UTEC"],
+  "editor.linkedEditing": true,
+  "editor.inlineSuggest.enabled": true,
+  "vscodeGoogleTranslate.preferredLanguage": "English",
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": false,
+    "markdown": true,
+    "scminput": false,
+    "yaml": false,
+    "jupyter": true
+  },
+  "cSpell.enableFiletypes": ["!cpp"],
+  "workbench.startupEditor": "none",
+  "tabnine.experimentalAutoImports": true,
+  "security.workspace.trust.untrustedFiles": "open",
+  "editor.minimap.enabled": false,
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "liveServer.settings.donotShowInfoMsg": true,
+  "redhat.telemetry.enabled": false,
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "boot-java.rewrite.reconcile": true,
+  "window.titleBarStyle": "custom",
+  "editor.unicodeHighlight.invisibleCharacters": false,
+  "lldb.suppressUpdateNotifications": true,
+  "glassit.alpha": 255,
+  "clock.alignment": "Right",
+  "clock.format": "hh:MM:ss",
+  "terminal.integrated.shell.linux": "/bin/bash",
+  "terminal.integrated.defaultProfile.linux": "zsh",
+  "terminal.integrated.profiles.linux": {
+    "bash": {
+      "path": "/usr/bin/bash",
+      "icon": "terminal-bash"
+    },
+    "zsh": {
+      "path": "zsh"
+    },
+    "fish": {
+      "path": "fish"
+    },
+    "tmux": {
+      "path": "tmux",
+      "icon": "terminal-tmux"
+    },
+    "pwsh": {
+      "path": "pwsh",
+      "icon": "terminal-powershell"
+    }
+  },
+  "githubPullRequests.pullBranch": "never",
+  "window.commandCenter": false,
+  "explorer.confirmDelete": false,
+  "git.autofetch": true,
+  "editor.fontFamily": "'CaskaydiaCove Nerd Font', 'monospace', monospace",
+  "[cpp]": {
+    "editor.wordBasedSuggestions": "off",
+    "editor.suggest.insertMode": "replace",
+    "editor.semanticHighlighting.enabled": true
+  },
+  "editor.tabSize": 2,
+  "editor.stickyTabStops": true,
+  "C_Cpp.default.intelliSenseMode": "linux-gcc-x86",
+  "C_Cpp.intelliSenseEngineFallback": "enabled",
+  "C_Cpp.errorSquiggles": "enabled",
+  "github.copilot.advanced": {},
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "markdown-preview-enhanced.previewTheme": "atom-dark.css",
+  "notebook.output.wordWrap": true,
+  "explorer.confirmDragAndDrop": false,
+  "workbench.editorAssociations": {
+    "*.copilotmd": "vscode.markdown.preview.editor",
+    "*.pyc": "default",
+    "*.md": "default"
+  },
+  "autopep8.args": ["\"tab size\": 2"],
+  "github.copilot.editor.enableAutoCompletions": true,
+  "cmake.pinnedCommands": [
+    "workbench.action.tasks.configureTaskRunner",
+    "workbench.action.tasks.runTask"
+  ],
+  "cmake.showOptionsMovedNotification": false,
+  "[markdown]": {
+    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+  },
+  "go.toolsManagement.autoUpdate": true,
+  "mssql.connectionGroups": [
+    {
+      "name": "ROOT",
+      "id": "313F4357-033E-491F-8B94-2670164228F2"
+    }
+  ],
+  "mssql.connections": [],
+  "update.showReleaseNotes": false,
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "docker.extension.enableComposeLanguageServer": false,
+  "[dockercompose]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "advanced",
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    },
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "[github-actions-workflow]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "cSpell.enabledFileTypes": {
+    "*": false
+  },
+  "terminal.integrated.inheritEnv": false,
+  "python.analysis.typeCheckingMode": "standard",
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "markdownlint.config": {
+    "MD024": {
+      "siblings_only": true
+    }
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "workbench.colorTheme": "Dark Modern",
+  "workbench.activityBar.location": "top",
+  "workbench.browser.showInTitleBar": true,
+  "telemetry.feedback.enabled": false,
+  "workbench.secondarySideBar.defaultVisibility": "hidden",
+  "telemetry.telemetryLevel": "off",
+  "telemetry.editStats.enabled": false,
+  "gitlens.telemetry.enabled": false,
+  "workbench.statusBar.visible": false,
+  "python.defaultInterpreterPath": "/home/snah/micromamba/envs/bd2"
+}

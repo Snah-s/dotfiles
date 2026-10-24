@@ -1,0 +1,50 @@
+// Coloque sus atajos de teclado en este archivo para sobreescribir los valores predeterminadosauto[]
+[
+  {
+    "key": "ctrl+a",
+    "command": "-extension.vim_ctrl+a",
+    "when": "editorTextFocus && vim.active && vim.use<C-a> && !inDebugRepl"
+  },
+  {
+    "key": "ctrl+shift+meta+n",
+    "command": "workbench.action.files.newUntitledFile"
+  },
+  {
+    "key": "ctrl+n",
+    "command": "-workbench.action.files.newUntitledFile"
+  },
+  {
+    "key": "ctrl+t",
+    "command": "-workbench.action.showAllSymbols"
+  },
+  {
+    "key": "ctrl+t",
+    "command": "workbench.action.terminal.new"
+  },
+  {
+    "key": "ctrl+n",
+    "command": "explorer.newFile"
+  },
+  {
+    "key": "shift+alt+right",
+    "command": "workbench.action.splitEditorToRightGroup"
+  },
+  {
+    "key": "shift+alt+left",
+    "command": "workbench.action.splitEditorToLeftGroup"
+  },
+  {
+    "key": "shift+alt+end",
+    "command": "terminal.focus"
+  },
+  {
+    "key": "ctrl+r",
+    "command": "workbench.action.reloadWindow",
+    "when": "false"
+  },
+  {
+    "key": "ctrl+r",
+    "command": "-workbench.action.reloadWindow",
+    "when": "isDevelopment"
+  }
+]
